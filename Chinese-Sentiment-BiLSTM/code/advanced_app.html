@@ -2323,6 +2323,7 @@ Naive Bayes 验证集评估结果（Baseline）<br>
             const loadingDiv = document.getElementById('trend-loading');
             const contentDiv = document.getElementById('trend-content');
             
+            // 确保加载状态显示
             loadingDiv.style.display = 'block';
             contentDiv.classList.add('d-none');
             
@@ -2337,35 +2338,35 @@ Naive Bayes 验证集评估结果（Baseline）<br>
                 }
                 */
                 
-                // 模拟数据
+                // 模拟数据 (2026年数据，只预测4月22以后)
                 const data = {
-                    dates: ['2024-01-01', '2024-01-08', '2024-01-15', '2024-01-22', '2024-01-29', '2024-02-05', '2024-02-12', '2024-02-19'],
-                    sentiment_values: [0.72, 0.75, 0.78, 0.73, 0.76, 0.80, 0.82, 0.85],
-                    rolling_mean: [0.72, 0.735, 0.75, 0.745, 0.765, 0.78, 0.795, 0.815],
-                    predictions: [0.87, 0.88, 0.90, 0.91, 0.92, 0.93, 0.94, 0.95],
-                    prediction_dates: ['2024-02-26', '2024-03-04', '2024-03-11', '2024-03-18', '2024-03-25', '2024-04-01', '2024-04-08', '2024-04-15'],
-                    historical_dates: ['2024-01-01', '2024-01-08', '2024-01-15', '2024-01-22', '2024-01-29', '2024-02-05', '2024-02-12', '2024-02-19'],
-                    historical_values: [0.72, 0.75, 0.78, 0.73, 0.76, 0.80, 0.82, 0.85],
+                    dates: ['2026-01-01', '2026-01-08', '2026-01-15', '2026-01-22', '2026-01-29', '2026-02-05', '2026-02-12', '2026-02-19', '2026-02-26', '2026-03-04', '2026-03-11', '2026-03-18', '2026-03-25', '2026-04-01', '2026-04-08', '2026-04-15', '2026-04-22'],
+                    sentiment_values: [0.72, 0.75, 0.78, 0.73, 0.76, 0.80, 0.82, 0.85, 0.87, 0.89, 0.91, 0.93, 0.92, 0.94, 0.95, 0.96, 0.97],
+                    rolling_mean: [0.72, 0.735, 0.75, 0.745, 0.765, 0.78, 0.795, 0.815, 0.835, 0.855, 0.875, 0.895, 0.905, 0.92, 0.935, 0.945, 0.955],
+                    predictions: [0.98, 0.985, 0.99, 0.992, 0.995, 0.997],
+                    prediction_dates: ['2026-04-29', '2026-05-06', '2026-05-13', '2026-05-20', '2026-05-27', '2026-06-03'],
+                    historical_dates: ['2026-01-01', '2026-01-08', '2026-01-15', '2026-01-22', '2026-01-29', '2026-02-05', '2026-02-12', '2026-02-19', '2026-02-26', '2026-03-04', '2026-03-11', '2026-03-18', '2026-03-25', '2026-04-01', '2026-04-08', '2026-04-15', '2026-04-22'],
+                    historical_values: [0.72, 0.75, 0.78, 0.73, 0.76, 0.80, 0.82, 0.85, 0.87, 0.89, 0.91, 0.93, 0.92, 0.94, 0.95, 0.96, 0.97],
                     stats: {
                         sentiment_stats: {
-                            mean: 0.77625,
-                            std: 0.0417,
+                            mean: 0.8835,
+                            std: 0.0792,
                             min: 0.72,
-                            max: 0.85
+                            max: 0.97
                         },
                         trend_direction: 'increasing',
                         recent_trend: 'increasing',
-                        overall_change: 0.13
+                        overall_change: 0.25
                     }
                 };
                 
+                // 验证数据完整性
+                if (!data || !data.dates || !data.sentiment_values || !data.stats) {
+                    throw new Error('数据格式不正确');
+                }
+                
                 // 更新统计卡片
-                document.getElementById('avg-sentiment').textContent = data.stats.sentiment_stats.mean.toFixed(4);
-                document.getElementById('std-sentiment').textContent = data.stats.sentiment_stats.std.toFixed(4);
-                document.getElementById('trend-direction').textContent = data.stats.trend_direction === 'increasing' ? '↑ 上升' : '↓ 下降';
-                document.getElementById('trend-direction').style.color = data.stats.trend_direction === 'increasing' ? '#2ecc71' : '#e74c3c';
-                document.getElementById('recent-trend').textContent = data.stats.recent_trend === 'increasing' ? '↑ 上升' : '↓ 下降';
-                document.getElementById('recent-trend').style.color = data.stats.recent_trend === 'increasing' ? '#2ecc71' : '#e74c3c';
+                updateStatCards(data.stats);
                 
                 // 渲染趋势图表
                 renderTrendChart(data.dates, data.sentiment_values, data.rolling_mean);
@@ -2389,167 +2390,224 @@ Naive Bayes 验证集评估结果（Baseline）<br>
             }
         }
         
-        function renderTrendChart(dates, values, rollingMean) {
-            const ctx = document.getElementById('trendChart').getContext('2d');
-            
-            if (trendChart) {
-                trendChart.destroy();
+        function updateStatCards(stats) {
+            try {
+                document.getElementById('avg-sentiment').textContent = stats.sentiment_stats.mean.toFixed(4);
+                document.getElementById('std-sentiment').textContent = stats.sentiment_stats.std.toFixed(4);
+                
+                const trendDirection = document.getElementById('trend-direction');
+                trendDirection.textContent = stats.trend_direction === 'increasing' ? '↑ 上升' : '↓ 下降';
+                trendDirection.style.color = stats.trend_direction === 'increasing' ? '#2ecc71' : '#e74c3c';
+                
+                const recentTrend = document.getElementById('recent-trend');
+                recentTrend.textContent = stats.recent_trend === 'increasing' ? '↑ 上升' : '↓ 下降';
+                recentTrend.style.color = stats.recent_trend === 'increasing' ? '#2ecc71' : '#e74c3c';
+            } catch (error) {
+                console.error('更新统计卡片失败:', error);
             }
-            
-            trendChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: dates,
-                    datasets: [
-                        {
-                            label: '情感指数',
-                            data: values,
-                            borderColor: '#3498db',
-                            backgroundColor: 'rgba(52, 152, 219, 0.1)',
-                            tension: 0.3,
-                            fill: true
-                        },
-                        {
-                            label: '移动平均(4期)',
-                            data: rollingMean,
-                            borderColor: '#e67e22',
-                            borderDash: [5, 5],
-                            tension: 0.3,
-                            fill: false
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        title: {
-                            display: false
-                        },
-                        legend: {
-                            position: 'top'
-                        }
+        }
+        
+        function renderTrendChart(dates, values, rollingMean) {
+            try {
+                const ctx = document.getElementById('trendChart').getContext('2d');
+                
+                if (!ctx) {
+                    throw new Error('图表容器未找到');
+                }
+                
+                if (trendChart) {
+                    trendChart.destroy();
+                }
+                
+                trendChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: dates,
+                        datasets: [
+                            {
+                                label: '情感指数',
+                                data: values,
+                                borderColor: '#3498db',
+                                backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                                tension: 0.3,
+                                fill: true
+                            },
+                            {
+                                label: '移动平均(4期)',
+                                data: rollingMean,
+                                borderColor: '#e67e22',
+                                borderDash: [5, 5],
+                                tension: 0.3,
+                                fill: false
+                            }
+                        ]
                     },
-                    scales: {
-                        y: {
-                            beginAtZero: false,
-                            min: Math.min(...values) - 0.1,
-                            max: Math.max(...values) + 0.1
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            title: {
+                                display: false
+                            },
+                            legend: {
+                                position: 'top'
+                            },
+                            tooltip: {
+                                mode: 'index',
+                                intersect: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: false,
+                                min: Math.min(...values) - 0.1,
+                                max: Math.max(...values) + 0.1
+                            }
                         }
                     }
-                }
-            });
+                });
+            } catch (error) {
+                console.error('渲染趋势图表失败:', error);
+            }
         }
         
         function renderPredictionChart(predictionDates, predictions, historicalDates, historicalValues) {
-            const ctx = document.getElementById('predictionChart').getContext('2d');
-            
-            if (predictionChart) {
-                predictionChart.destroy();
-            }
-            
-            const historicalStartIndex = Math.max(0, historicalDates.length - 30);
-            const recentHistoricalDates = historicalDates.slice(historicalStartIndex);
-            const recentHistoricalValues = historicalValues.slice(historicalStartIndex);
-            
-            predictionChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: [...recentHistoricalDates, ...predictionDates],
-                    datasets: [
-                        {
-                            label: '历史情感指数',
-                            data: [...recentHistoricalValues, ...new Array(predictions.length).fill(null)],
-                            borderColor: '#3498db',
-                            backgroundColor: 'rgba(52, 152, 219, 0.1)',
-                            tension: 0.3,
-                            fill: true
-                        },
-                        {
-                            label: '预测情感指数',
-                            data: [...new Array(recentHistoricalValues.length - 1).fill(null), recentHistoricalValues[recentHistoricalValues.length - 1], ...predictions],
-                            borderColor: '#e74c3c',
-                            tension: 0.3,
-                            fill: false
-                        },
-                        {
-                            label: '置信区间',
-                            data: [...new Array(recentHistoricalValues.length - 1).fill(null), recentHistoricalValues[recentHistoricalValues.length - 1],
-                                   ...predictions.map(p => p + 0.05),
-                                   ...new Array(predictions.length).fill(null),
-                                   ...new Array(recentHistoricalValues.length - 1).fill(null), recentHistoricalValues[recentHistoricalValues.length - 1],
-                                   ...predictions.map(p => p - 0.05)],
-                            borderColor: 'rgba(231, 76, 60, 0.3)',
-                            backgroundColor: 'rgba(231, 76, 60, 0.1)',
-                            fill: '+1',
-                            tension: 0.3
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'top'
-                        }
+            try {
+                const ctx = document.getElementById('predictionChart').getContext('2d');
+                
+                if (!ctx) {
+                    throw new Error('图表容器未找到');
+                }
+                
+                if (predictionChart) {
+                    predictionChart.destroy();
+                }
+                
+                const historicalStartIndex = Math.max(0, historicalDates.length - 30);
+                const recentHistoricalDates = historicalDates.slice(historicalStartIndex);
+                const recentHistoricalValues = historicalValues.slice(historicalStartIndex);
+                
+                predictionChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: [...recentHistoricalDates, ...predictionDates],
+                        datasets: [
+                            {
+                                label: '历史情感指数',
+                                data: [...recentHistoricalValues, ...new Array(predictions.length).fill(null)],
+                                borderColor: '#3498db',
+                                backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                                tension: 0.3,
+                                fill: true
+                            },
+                            {
+                                label: '预测情感指数',
+                                data: [...new Array(recentHistoricalValues.length - 1).fill(null), recentHistoricalValues[recentHistoricalValues.length - 1], ...predictions],
+                                borderColor: '#e74c3c',
+                                tension: 0.3,
+                                fill: false
+                            },
+                            {
+                                label: '置信区间',
+                                data: [...new Array(recentHistoricalValues.length - 1).fill(null), recentHistoricalValues[recentHistoricalValues.length - 1],
+                                       ...predictions.map(p => p + 0.05),
+                                       ...new Array(predictions.length).fill(null),
+                                       ...new Array(recentHistoricalValues.length - 1).fill(null), recentHistoricalValues[recentHistoricalValues.length - 1],
+                                       ...predictions.map(p => p - 0.05)],
+                                borderColor: 'rgba(231, 76, 60, 0.3)',
+                                backgroundColor: 'rgba(231, 76, 60, 0.1)',
+                                fill: '+1',
+                                tension: 0.3
+                            }
+                        ]
                     },
-                    scales: {
-                        y: {
-                            beginAtZero: false
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'top'
+                            },
+                            tooltip: {
+                                mode: 'index',
+                                intersect: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: false
+                            }
                         }
                     }
-                }
-            });
+                });
+            } catch (error) {
+                console.error('渲染预测图表失败:', error);
+            }
         }
         
         function renderPredictionTable(dates, predictions) {
-            const tbody = document.getElementById('prediction-tbody');
-            let html = '';
-            
-            dates.forEach((date, index) => {
-                const pred = predictions[index];
-                let trend = '持平';
-                let trendClass = 'badge bg-secondary';
-                
-                if (index > 0) {
-                    const diff = pred - predictions[index - 1];
-                    if (diff > 0.02) {
-                        trend = '↑ 上升';
-                        trendClass = 'badge bg-success';
-                    } else if (diff < -0.02) {
-                        trend = '↓ 下降';
-                        trendClass = 'badge bg-danger';
-                    }
+            try {
+                const tbody = document.getElementById('prediction-tbody');
+                if (!tbody) {
+                    throw new Error('表格容器未找到');
                 }
                 
-                html += `<tr>
-                    <td>${date}</td>
-                    <td>${pred.toFixed(4)}</td>
-                    <td>[${(pred - 0.05).toFixed(4)}, ${(pred + 0.05).toFixed(4)}]</td>
-                    <td><span class="${trendClass}">${trend}</span></td>
-                </tr>`;
-            });
-            
-            tbody.innerHTML = html;
+                let html = '';
+                
+                dates.forEach((date, index) => {
+                    const pred = predictions[index];
+                    let trend = '持平';
+                    let trendClass = 'badge bg-secondary';
+                    
+                    if (index > 0) {
+                        const diff = pred - predictions[index - 1];
+                        if (diff > 0.02) {
+                            trend = '↑ 上升';
+                            trendClass = 'badge bg-success';
+                        } else if (diff < -0.02) {
+                            trend = '↓ 下降';
+                            trendClass = 'badge bg-danger';
+                        }
+                    }
+                    
+                    html += `<tr>
+                        <td>${date}</td>
+                        <td>${pred.toFixed(4)}</td>
+                        <td>[${(pred - 0.05).toFixed(4)}, ${(pred + 0.05).toFixed(4)}]</td>
+                        <td><span class="${trendClass}">${trend}</span></td>
+                    </tr>`;
+                });
+                
+                tbody.innerHTML = html;
+            } catch (error) {
+                console.error('渲染预测表格失败:', error);
+            }
         }
         
         function generateSummary(stats) {
-            const summary = document.getElementById('summary-text');
-            const trendWord = stats.trend_direction === 'increasing' ? '呈上升趋势' : '呈下降趋势';
-            const recentWord = stats.recent_trend === 'increasing' ? '近期也在上升' : '近期在下降';
-            
-            summary.innerHTML = `
-                <strong>整体趋势：</strong>根据历史情感数据分析，整体情感趋势${trendWord}，
-                整体变化幅度为 <strong>${stats.overall_change.toFixed(4)}</strong>。<br><br>
+            try {
+                const summary = document.getElementById('summary-text');
+                if (!summary) {
+                    throw new Error('总结容器未找到');
+                }
                 
-                <strong>统计指标：</strong>情感指数均值: <strong>${stats.sentiment_stats.mean.toFixed(4)}</strong>，
-                标准差: <strong>${stats.sentiment_stats.std.toFixed(4)}</strong>，
-                范围: [${stats.sentiment_stats.min.toFixed(4)}, ${stats.sentiment_stats.max.toFixed(4)}]。<br><br>
+                const trendWord = stats.trend_direction === 'increasing' ? '呈上升趋势' : '呈下降趋势';
+                const recentWord = stats.recent_trend === 'increasing' ? '近期也在上升' : '近期在下降';
                 
-                <strong>预测结论：</strong>${recentWord}，
-                预计未来短期内情感趋势将${stats.recent_trend === 'increasing' ? '继续保持积极态势' : '面临一定压力，需关注可能的下行风险'}。<br><br>
-                
-                <strong>建议：</strong>${stats.recent_trend === 'increasing' ? '可以适当增加正面内容的投放，保持用户情绪的积极状态。' : '建议关注用户反馈，及时调整策略以改善用户情感。'}
-            `;
+                summary.innerHTML = `
+                    <strong>整体趋势：</strong>根据历史情感数据分析，整体情感趋势${trendWord}，
+                    整体变化幅度为 <strong>${stats.overall_change.toFixed(4)}</strong>。<br><br>
+                    
+                    <strong>统计指标：</strong>情感指数均值: <strong>${stats.sentiment_stats.mean.toFixed(4)}</strong>，
+                    标准差: <strong>${stats.sentiment_stats.std.toFixed(4)}</strong>，
+                    范围: [${stats.sentiment_stats.min.toFixed(4)}, ${stats.sentiment_stats.max.toFixed(4)}]。<br><br>
+                    
+                    <strong>预测结论：</strong>${recentWord}，
+                    预计未来短期内情感趋势将${stats.recent_trend === 'increasing' ? '继续保持积极态势' : '面临一定压力，需关注可能的下行风险'}。<br><br>
+                    
+                    <strong>建议：</strong>${stats.recent_trend === 'increasing' ? '可以适当增加正面内容的投放，保持用户情绪的积极状态。' : '建议关注用户反馈，及时调整策略以改善用户情感。'}
+                `;
+            } catch (error) {
+                console.error('生成分析总结失败:', error);
+            }
         }
         
         // AI 功能
@@ -2574,13 +2632,15 @@ Naive Bayes 验证集评估结果（Baseline）<br>
                 
                 let answer = '';
                 if (query.includes('趋势') || query.includes('原因')) {
-                    answer = '根据近期情感数据的分析，情感指数呈现上升趋势，主要原因可能包括：\n1. 优质内容的持续输出\n2. 用户参与度的提高\n3. 产品功能的优化\n4. 市场环境的积极变化\n\n建议继续保持当前的内容策略，并适当增加互动活动以维持用户的积极情绪。';
+                    answer = '根据2026年情感数据的分析，情感指数呈现明显上升趋势，从1月份的0.72上升到4月22日的0.97，主要原因可能包括：\n1. 优质内容的持续输出\n2. 用户参与度的显著提高\n3. 产品功能的持续优化\n4. 市场环境的积极变化\n\n建议继续保持当前的内容策略，并适当增加互动活动以维持用户的积极情绪。';
                 } else if (query.includes('预测') || query.includes('未来')) {
-                    answer = '基于当前的趋势分析，未来30天内情感指数预计将继续保持上升态势，预计增长率在5-8%左右。建议密切关注市场动态，及时调整策略以应对可能的变化。';
+                    answer = '基于2026年的趋势分析，4月22日以后的30天内情感指数预计将继续保持上升态势，预计从当前的0.97增长到0.997左右。建议密切关注市场动态，及时调整策略以应对可能的变化。';
                 } else if (query.includes('异常') || query.includes('问题')) {
-                    answer = '通过异常检测算法，我们发现近期情感数据中存在一些波动点，主要集中在节假日前后。这些波动属于正常现象，建议在这些时期加强用户沟通，及时回应用户关切。';
+                    answer = '通过异常检测算法，我们发现2026年情感数据中存在一些波动点，主要集中在以下时期：\n1. 1月15日：情感指数突然下降8%\n2. 2月5日：情感指数大幅上升12%\n3. 2月19日：情感指数波动较大\n\n这些波动属于正常现象，建议在这些时期加强用户沟通，及时回应用户关切。';
+                } else if (query.includes('建议') || query.includes('策略')) {
+                    answer = '基于2026年的情感趋势分析，建议采取以下策略：\n1. 持续监控情感变化，每周生成趋势报告\n2. 针对情感波动较大的时期（如1月15日、2月5日、2月19日），提前制定应对方案\n3. 加强用户反馈收集，及时调整产品策略\n4. 利用情感高峰期（如4月22日后）进行营销活动，提高转化率';
                 } else {
-                    answer = '感谢您的问题。基于当前的情感数据分析，我可以提供以下洞察：\n\n1. 整体情感趋势呈上升状态\n2. 波动幅度在正常范围内\n3. 建议关注用户反馈，持续优化产品体验\n\n如果您有更具体的问题，请随时提问。';
+                    answer = '感谢您的问题。基于2026年的情感数据分析，我可以提供以下洞察：\n\n1. 整体情感趋势呈明显上升状态，从0.72增长到0.97\n2. 波动幅度在正常范围内，标准差为0.0792\n3. 4月22日以后预计将继续保持上升态势\n\n如果您有更具体的问题，请随时提问。';
                 }
                 
                 answerDiv.textContent = answer;
@@ -2595,12 +2655,20 @@ Naive Bayes 验证集评估结果（Baseline）<br>
             const model = document.getElementById('prediction-model').value;
             const days = parseInt(document.getElementById('prediction-days').value);
             
+            if (isNaN(days) || days < 7 || days > 90) {
+                alert('请输入有效的预测周期（7-90天）');
+                return;
+            }
+            
             // 模拟预测调整
-            alert(`正在使用 ${model === 'lstm' ? 'LSTM' : model === 'transformer' ? 'Transformer' : '混合AI'} 模型重新预测未来 ${days} 天的情感趋势...`);
+            const modelName = model === 'lstm' ? 'LSTM' : model === 'transformer' ? 'Transformer' : '混合AI';
+            alert(`正在使用 ${modelName} 模型重新预测未来 ${days} 天的情感趋势...`);
             
             // 这里可以添加实际的预测逻辑
             setTimeout(() => {
                 alert('预测调整完成！新的预测结果已更新。');
+                // 重新加载数据以显示新的预测结果
+                loadTrendData();
             }, 2000);
         }
         
@@ -2609,15 +2677,20 @@ Naive Bayes 验证集评估结果（Baseline）<br>
             const anomalyResults = document.getElementById('anomaly-results');
             const anomalyList = document.getElementById('anomaly-list');
             
+            if (!anomalyResults || !anomalyList) {
+                console.error('异常检测容器未找到');
+                return;
+            }
+            
             anomalyResults.classList.remove('d-none');
             anomalyList.innerHTML = '<li class="list-group-item">AI 正在检测异常点...</li>';
             
             // 模拟异常检测
             setTimeout(() => {
                 const anomalies = [
-                    '2024-01-15: 情感指数突然下降 8%，可能与竞品发布有关',
-                    '2024-02-05: 情感指数大幅上升 12%，可能与促销活动有关',
-                    '2024-02-19: 情感指数波动较大，可能与节假日因素有关'
+                    '2026-01-15: 情感指数突然下降 8%，可能与竞品发布有关',
+                    '2026-02-05: 情感指数大幅上升 12%，可能与促销活动有关',
+                    '2026-02-19: 情感指数波动较大，可能与节假日因素有关'
                 ];
                 
                 anomalyList.innerHTML = '';

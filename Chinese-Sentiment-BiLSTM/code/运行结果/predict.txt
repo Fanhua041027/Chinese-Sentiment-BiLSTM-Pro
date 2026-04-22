@@ -1,0 +1,213 @@
+poetry run python main.py predict                                                                                                              ─╯
+============================================================
+执行命令：predict - 测试 Bi-LSTM 模型
+============================================================
+信息：正在加载模型至设备：cuda。
+信息：模型与词表加载完成。
+信息：开始在测试集上进行批量评估。
+信息：已加载词表，共 30000 个 token（含特殊符号）。
+评估进度:   0%|                                                                                                           | 0/581 [00:00<?, ?batch/s]Building prefix dict from the default dictionary ...
+Building prefix dict from the default dictionary ...
+Loading model from cache /tmp/jieba.cache
+Loading model from cache /tmp/jieba.cache
+Building prefix dict from the default dictionary ...
+Loading model from cache /tmp/jieba.cache
+Building prefix dict from the default dictionary ...
+Loading model from cache /tmp/jieba.cache
+Building prefix dict from the default dictionary ...
+Building prefix dict from the default dictionary ...
+Loading model from cache /tmp/jieba.cache
+Loading model from cache /tmp/jieba.cache
+Building prefix dict from the default dictionary ...
+Building prefix dict from the default dictionary ...
+Loading model from cache /tmp/jieba.cache
+Loading model from cache /tmp/jieba.cache
+Loading model cost 0.461 seconds.
+Prefix dict has been built successfully.
+Loading model cost 0.469 seconds.
+Prefix dict has been built successfully.
+Loading model cost 0.470 seconds.
+Prefix dict has been built successfully.
+Loading model cost 0.473 seconds.
+Prefix dict has been built successfully.
+Loading model cost 0.477 seconds.
+Prefix dict has been built successfully.
+Loading model cost 0.478 seconds.
+Prefix dict has been built successfully.
+Loading model cost 0.480 seconds.
+Prefix dict has been built successfully.
+Loading model cost 0.481 seconds.
+Prefix dict has been built successfully.
+评估进度: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 581/581 [00:20<00:00, 28.13batch/s]
+信息：测试集评估完成，正在生成分类报告与混淆矩阵。
+
+============================================================
+测试集最终评估报告（Final Test Report）
+============================================================
+               precision    recall  f1-score   support
+
+Negative (负向)     0.8114    0.8379    0.8244     65770
+Positive (正向)     0.9535    0.9447    0.9491    231477
+
+     accuracy                         0.9210    297247
+    macro avg     0.8824    0.8913    0.8867    297247
+ weighted avg     0.9221    0.9210    0.9215    297247
+
+信息：测试集分类报告已保存至：dataset/reports/test_report.txt。
+信息：混淆矩阵图已保存至：dataset/figures/confusion_matrix.png。
+
+============================================================
+信息：开始生成 Case Study 可视化图表。
+============================================================
+信息：处理案例 Case 1：完全浪费时间，不仅演员演技尴尬，剧本也是一塌糊涂。
+Building prefix dict from the default dictionary ...
+Loading model from cache /tmp/jieba.cache
+Loading model cost 0.397 seconds.
+Prefix dict has been built successfully.
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 23436 (\N{CJK UNIFIED IDEOGRAPH-5B8C}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 20840 (\N{CJK UNIFIED IDEOGRAPH-5168}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 28010 (\N{CJK UNIFIED IDEOGRAPH-6D6A}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 36153 (\N{CJK UNIFIED IDEOGRAPH-8D39}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 26102 (\N{CJK UNIFIED IDEOGRAPH-65F6}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 38388 (\N{CJK UNIFIED IDEOGRAPH-95F4}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 65292 (\N{FULLWIDTH COMMA}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 19981 (\N{CJK UNIFIED IDEOGRAPH-4E0D}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 20165 (\N{CJK UNIFIED IDEOGRAPH-4EC5}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 28436 (\N{CJK UNIFIED IDEOGRAPH-6F14}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 21592 (\N{CJK UNIFIED IDEOGRAPH-5458}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 25216 (\N{CJK UNIFIED IDEOGRAPH-6280}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 23604 (\N{CJK UNIFIED IDEOGRAPH-5C34}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 23596 (\N{CJK UNIFIED IDEOGRAPH-5C2C}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 21095 (\N{CJK UNIFIED IDEOGRAPH-5267}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 26412 (\N{CJK UNIFIED IDEOGRAPH-672C}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 20063 (\N{CJK UNIFIED IDEOGRAPH-4E5F}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 26159 (\N{CJK UNIFIED IDEOGRAPH-662F}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 19968 (\N{CJK UNIFIED IDEOGRAPH-4E00}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 22604 (\N{CJK UNIFIED IDEOGRAPH-584C}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 31946 (\N{CJK UNIFIED IDEOGRAPH-7CCA}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 28034 (\N{CJK UNIFIED IDEOGRAPH-6D82}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 12290 (\N{IDEOGRAPHIC FULL STOP}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+信息：Case 1 的注意力热力图已保存至：dataset/figures/case_study_1.png。
+信息：处理案例 Case 2：这是我今年看过的最好的电影，特效炸裂，强烈推荐！
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 36825 (\N{CJK UNIFIED IDEOGRAPH-8FD9}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 26159 (\N{CJK UNIFIED IDEOGRAPH-662F}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 25105 (\N{CJK UNIFIED IDEOGRAPH-6211}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 20170 (\N{CJK UNIFIED IDEOGRAPH-4ECA}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 24180 (\N{CJK UNIFIED IDEOGRAPH-5E74}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 30475 (\N{CJK UNIFIED IDEOGRAPH-770B}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 36807 (\N{CJK UNIFIED IDEOGRAPH-8FC7}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 30340 (\N{CJK UNIFIED IDEOGRAPH-7684}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 26368 (\N{CJK UNIFIED IDEOGRAPH-6700}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 22909 (\N{CJK UNIFIED IDEOGRAPH-597D}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 30005 (\N{CJK UNIFIED IDEOGRAPH-7535}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 24433 (\N{CJK UNIFIED IDEOGRAPH-5F71}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 65292 (\N{FULLWIDTH COMMA}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 29305 (\N{CJK UNIFIED IDEOGRAPH-7279}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 25928 (\N{CJK UNIFIED IDEOGRAPH-6548}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 28856 (\N{CJK UNIFIED IDEOGRAPH-70B8}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 35010 (\N{CJK UNIFIED IDEOGRAPH-88C2}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 24378 (\N{CJK UNIFIED IDEOGRAPH-5F3A}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 28872 (\N{CJK UNIFIED IDEOGRAPH-70C8}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 25512 (\N{CJK UNIFIED IDEOGRAPH-63A8}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 33616 (\N{CJK UNIFIED IDEOGRAPH-8350}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 65281 (\N{FULLWIDTH EXCLAMATION MARK}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+信息：Case 2 的注意力热力图已保存至：dataset/figures/case_study_2.png。
+信息：处理案例 Case 3：虽然剧情有点老套，但是特效真的太棒了，完全值回票价。
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 34429 (\N{CJK UNIFIED IDEOGRAPH-867D}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 28982 (\N{CJK UNIFIED IDEOGRAPH-7136}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 21095 (\N{CJK UNIFIED IDEOGRAPH-5267}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 24773 (\N{CJK UNIFIED IDEOGRAPH-60C5}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 26377 (\N{CJK UNIFIED IDEOGRAPH-6709}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 28857 (\N{CJK UNIFIED IDEOGRAPH-70B9}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 32769 (\N{CJK UNIFIED IDEOGRAPH-8001}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 22871 (\N{CJK UNIFIED IDEOGRAPH-5957}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 65292 (\N{FULLWIDTH COMMA}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 20294 (\N{CJK UNIFIED IDEOGRAPH-4F46}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 26159 (\N{CJK UNIFIED IDEOGRAPH-662F}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 29305 (\N{CJK UNIFIED IDEOGRAPH-7279}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 25928 (\N{CJK UNIFIED IDEOGRAPH-6548}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 30495 (\N{CJK UNIFIED IDEOGRAPH-771F}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 30340 (\N{CJK UNIFIED IDEOGRAPH-7684}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 22826 (\N{CJK UNIFIED IDEOGRAPH-592A}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 26834 (\N{CJK UNIFIED IDEOGRAPH-68D2}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 20102 (\N{CJK UNIFIED IDEOGRAPH-4E86}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 23436 (\N{CJK UNIFIED IDEOGRAPH-5B8C}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 20840 (\N{CJK UNIFIED IDEOGRAPH-5168}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 20540 (\N{CJK UNIFIED IDEOGRAPH-503C}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 22238 (\N{CJK UNIFIED IDEOGRAPH-56DE}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 31080 (\N{CJK UNIFIED IDEOGRAPH-7968}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 20215 (\N{CJK UNIFIED IDEOGRAPH-4EF7}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+.venv/lib/python3.11/site-packages/seaborn/utils.py:61: UserWarning: Glyph 12290 (\N{IDEOGRAPHIC FULL STOP}) missing from font(s) DejaVu Sans.
+  fig.canvas.draw()
+信息：Case 3 的注意力热力图已保存至：dataset/figures/case_study_3.png。
+
+信息：测试集评估与可视化已全部生成，请查看 dataset/ 目录。

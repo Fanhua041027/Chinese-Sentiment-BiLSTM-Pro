@@ -1,0 +1,158 @@
+poetry run python main.py train                                                                                                                ─╯
+============================================================
+执行命令：train - 训练 Bi-LSTM + Attention 模型
+============================================================
+信息：随机种子已设置为 42。
+信息：当前计算设备：cuda。
+信息：自动混合精度（AMP）状态：启用。
+信息：词表大小（vocab size）为：30000。
+信息：已加载词表，共 30000 个 token（含特殊符号）。
+信息：已加载词表，共 30000 个 token（含特殊符号）。
+信息：正样本权重（pos_weight）为：0.2841。
+信息：模型可训练参数总数：6,208,514。
+信息：开始训练，共 20 个 epoch。
+Training:   0%|                                                                                                             | 0/2032 [00:00<?, ?it/s]Building prefix dict from the default dictionary ...
+Loading model from cache /tmp/jieba.cache
+Building prefix dict from the default dictionary ...
+Loading model from cache /tmp/jieba.cache
+Building prefix dict from the default dictionary ...
+Loading model from cache /tmp/jieba.cache
+Building prefix dict from the default dictionary ...
+Loading model from cache /tmp/jieba.cache
+Building prefix dict from the default dictionary ...
+Building prefix dict from the default dictionary ...
+Loading model from cache /tmp/jieba.cache
+Loading model from cache /tmp/jieba.cache
+Building prefix dict from the default dictionary ...
+Loading model from cache /tmp/jieba.cache
+Building prefix dict from the default dictionary ...
+Loading model from cache /tmp/jieba.cache
+Loading model cost 0.450 seconds.
+Prefix dict has been built successfully.
+Loading model cost 0.452 seconds.
+Prefix dict has been built successfully.
+Loading model cost 0.458 seconds.
+Prefix dict has been built successfully.
+Loading model cost 0.459 seconds.
+Prefix dict has been built successfully.
+Loading model cost 0.460 seconds.
+Prefix dict has been built successfully.
+Loading model cost 0.462 seconds.
+Prefix dict has been built successfully.
+Loading model cost 0.466 seconds.
+Prefix dict has been built successfully.
+Loading model cost 0.479 seconds.
+Prefix dict has been built successfully.
+Building prefix dict from the default dictionary ...                                                                                                 
+Building prefix dict from the default dictionary ...
+Loading model from cache /tmp/jieba.cache
+Loading model from cache /tmp/jieba.cache
+Building prefix dict from the default dictionary ...
+Building prefix dict from the default dictionary ...
+Loading model from cache /tmp/jieba.cache
+Loading model from cache /tmp/jieba.cache
+Building prefix dict from the default dictionary ...
+Building prefix dict from the default dictionary ...
+Building prefix dict from the default dictionary ...
+Loading model from cache /tmp/jieba.cache
+Loading model from cache /tmp/jieba.cache
+Loading model from cache /tmp/jieba.cache
+Building prefix dict from the default dictionary ...
+Loading model from cache /tmp/jieba.cache
+Loading model cost 0.579 seconds.
+Prefix dict has been built successfully.
+Loading model cost 0.580 seconds.
+Prefix dict has been built successfully.
+Loading model cost 0.587 seconds.
+Prefix dict has been built successfully.
+Loading model cost 0.588 seconds.
+Prefix dict has been built successfully.
+Loading model cost 0.589 seconds.
+Prefix dict has been built successfully.
+Loading model cost 0.602 seconds.
+Prefix dict has been built successfully.
+Loading model cost 0.675 seconds.
+Prefix dict has been built successfully.
+Loading model cost 0.696 seconds.
+Prefix dict has been built successfully.
+Epoch: 01 | Time: 2m 23s | LR: 0.001000
+        Train Loss: 0.1812 | Train Acc: 80.70%
+         Val. Loss: 0.2833 |  Val. Acc: 88.03% | Val F1: 92.04%
+        信息：验证集 F1 提升，已保存当前最优模型（Val F1: 92.04%）。
+Epoch: 02 | Time: 2m 29s | LR: 0.001000                                                                                                              
+        Train Loss: 0.1408 | Train Acc: 85.99%
+         Val. Loss: 0.2531 |  Val. Acc: 89.70% | Val F1: 93.22%
+        信息：验证集 F1 提升，已保存当前最优模型（Val F1: 93.22%）。
+Epoch: 03 | Time: 2m 32s | LR: 0.001000                                                                                                              
+        Train Loss: 0.1286 | Train Acc: 87.36%
+         Val. Loss: 0.2384 |  Val. Acc: 90.26% | Val F1: 93.59%
+        信息：验证集 F1 提升，已保存当前最优模型（Val F1: 93.59%）。
+Epoch: 04 | Time: 2m 33s | LR: 0.001000                                                                                                              
+        Train Loss: 0.1217 | Train Acc: 88.10%
+         Val. Loss: 0.2336 |  Val. Acc: 90.71% | Val F1: 93.91%
+        信息：验证集 F1 提升，已保存当前最优模型（Val F1: 93.91%）。
+Epoch: 05 | Time: 2m 35s | LR: 0.001000                                                                                                              
+        Train Loss: 0.1168 | Train Acc: 88.65%
+         Val. Loss: 0.2394 |  Val. Acc: 90.59% | Val F1: 93.81%
+        信息：验证集 F1 未提升（1/5）。
+Epoch: 06 | Time: 2m 37s | LR: 0.001000                                                                                                              
+        Train Loss: 0.1130 | Train Acc: 89.06%
+         Val. Loss: 0.2206 |  Val. Acc: 91.24% | Val F1: 94.28%
+        信息：验证集 F1 提升，已保存当前最优模型（Val F1: 94.28%）。
+Epoch: 07 | Time: 2m 39s | LR: 0.001000                                                                                                              
+        Train Loss: 0.1096 | Train Acc: 89.37%
+         Val. Loss: 0.2217 |  Val. Acc: 91.33% | Val F1: 94.35%
+        信息：验证集 F1 提升，已保存当前最优模型（Val F1: 94.35%）。
+Epoch: 08 | Time: 2m 38s | LR: 0.001000                                                                                                              
+        Train Loss: 0.1073 | Train Acc: 89.66%
+         Val. Loss: 0.2127 |  Val. Acc: 91.66% | Val F1: 94.59%
+        信息：验证集 F1 提升，已保存当前最优模型（Val F1: 94.59%）。
+Epoch: 09 | Time: 2m 35s | LR: 0.001000                                                                                                              
+        Train Loss: 0.1050 | Train Acc: 89.84%
+         Val. Loss: 0.2120 |  Val. Acc: 91.86% | Val F1: 94.73%
+        信息：验证集 F1 提升，已保存当前最优模型（Val F1: 94.73%）。
+Epoch: 10 | Time: 2m 35s | LR: 0.001000                                                                                                              
+        Train Loss: 0.1028 | Train Acc: 90.10%
+         Val. Loss: 0.2121 |  Val. Acc: 91.62% | Val F1: 94.56%
+        信息：验证集 F1 未提升（1/5）。
+Epoch: 11 | Time: 2m 36s | LR: 0.001000                                                                                                              
+        Train Loss: 0.1012 | Train Acc: 90.23%
+         Val. Loss: 0.2129 |  Val. Acc: 91.86% | Val F1: 94.72%
+        信息：验证集 F1 未提升（2/5）。
+Epoch: 12 | Time: 2m 35s | LR: 0.001000                                                                                                              
+        Train Loss: 0.0994 | Train Acc: 90.41%
+         Val. Loss: 0.2082 |  Val. Acc: 91.86% | Val F1: 94.71%
+        信息：验证集 F1 未提升（3/5）。
+Epoch: 13 | Time: 2m 36s | LR: 0.001000                                                                                                              
+        Train Loss: 0.0983 | Train Acc: 90.51%
+         Val. Loss: 0.2098 |  Val. Acc: 91.94% | Val F1: 94.78%
+        信息：验证集 F1 提升，已保存当前最优模型（Val F1: 94.78%）。
+Epoch: 14 | Time: 2m 36s | LR: 0.001000                                                                                                              
+        Train Loss: 0.0970 | Train Acc: 90.66%
+         Val. Loss: 0.2108 |  Val. Acc: 92.08% | Val F1: 94.89%
+        信息：验证集 F1 提升，已保存当前最优模型（Val F1: 94.89%）。
+Epoch: 15 | Time: 2m 35s | LR: 0.001000                                                                                                              
+        Train Loss: 0.0956 | Train Acc: 90.79%
+         Val. Loss: 0.2073 |  Val. Acc: 92.08% | Val F1: 94.88%
+        信息：验证集 F1 未提升（1/5）。
+Epoch: 16 | Time: 2m 35s | LR: 0.001000                                                                                                              
+        Train Loss: 0.0945 | Train Acc: 90.88%
+         Val. Loss: 0.2124 |  Val. Acc: 91.77% | Val F1: 94.65%
+        信息：验证集 F1 未提升（2/5）。
+Epoch: 17 | Time: 2m 35s | LR: 0.001000                                                                                                              
+        Train Loss: 0.0937 | Train Acc: 90.99%
+         Val. Loss: 0.2069 |  Val. Acc: 92.07% | Val F1: 94.86%
+        信息：验证集 F1 未提升（3/5）。
+Epoch: 18 | Time: 2m 35s | LR: 0.001000                                                                                                              
+        Train Loss: 0.0929 | Train Acc: 91.03%
+         Val. Loss: 0.2137 |  Val. Acc: 92.04% | Val F1: 94.86%
+        信息：验证集 F1 未提升（4/5）。
+Epoch: 19 | Time: 2m 35s | LR: 0.001000                                                                                                              
+        Train Loss: 0.0918 | Train Acc: 91.12%
+         Val. Loss: 0.2100 |  Val. Acc: 92.19% | Val F1: 94.96%
+        信息：验证集 F1 提升，已保存当前最优模型（Val F1: 94.96%）。
+Epoch: 20 | Time: 2m 35s | LR: 0.001000                                                                                                              
+        Train Loss: 0.0912 | Train Acc: 91.18%
+         Val. Loss: 0.2052 |  Val. Acc: 92.20% | Val F1: 94.97%
+        信息：验证集 F1 提升，已保存当前最优模型（Val F1: 94.97%）。
+信息：训练日志已保存至：dataset/reports/training_log.csv。

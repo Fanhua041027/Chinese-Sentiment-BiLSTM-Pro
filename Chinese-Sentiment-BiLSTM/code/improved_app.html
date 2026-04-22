@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中文影评情感分析 - 可视化平台</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --accent-color: #e74c3c;
+            --dark-color: #2c3e50;
+            --light-color: #ecf0f1;
+        }
+        
+        body {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .container {
+            max-width: 1400px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 60px 0;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card {
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-header {
+            border-radius: 12px 12px 0 0;
+            font-weight: bold;
+        }
+        
+        .feature-card {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin: 30px 0;
+        }
+        
+        .metrics-card {
+            margin-bottom: 30px;
+        }
+        
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .metric-label {
+            font-size: 1rem;
+            color: #666;
+        }
+        
+        .nav-link {
+            color: var(--dark-color);
+            font-weight: 500;
+        }
+        
+        .nav-link.active {
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--primary-color);
+        }
+        
+        .tab-content {
+            margin-top: 30px;
+        }
+        
+        .report-content {
+            white-space: pre-wrap;
+            font-family: monospace;
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #e9ecef;
+        }
+        
+        .case-study-card {
+            margin-bottom: 30px;
+        }
+        
+        .case-study-image {
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .header {
+                padding: 40px 0;
+            }
+            
+            .chart-container {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 页面头部 -->
+    <div class="header text-center">
+        <div class="container">
+            <h1 class="display-4 mb-3">中文影评情感分析</h1>
+            <p class="lead">基于深度学习的情感分析系统 - 三种模型性能对比</p>
+        </div>
+    </div>
+    
+    <!-- 导航栏 -->
+    <div class="container mb-5">
+        <ul class="nav nav-tabs justify-content-center">
+            <li class="nav-item">
+                <a class="nav-link active" data-bs-toggle="tab" href="#home">项目概述</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#performance">模型性能</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#visualization">可视化分析</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#case-study">案例分析</a>
+            </li>
+        </ul>
+    </div>
+    
+    <!-- 主内容区 -->
+    <div class="container">
+        <div class="tab-content">
+            <!-- 项目概述 -->
+            <div id="home" class="tab-pane fade show active">
+                <div class="row mb-5">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h2 class="card-title mb-4">项目简介</h2>
+                                <p class="card-text">
+                                    本项目实现了一个基于深度学习的中文影评情感分析系统，对比了三种不同层次的模型方案：
+                                    Naive Bayes（传统机器学习）、Bi-LSTM+Attention（轻量深度学习）和BERT（预训练语言模型）。
+                                    项目使用了148万条豆瓣影评数据，提供了完整的端到端解决方案。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card feature-card">
+                            <div class="card-body text-center">
+                                <div class="feature-icon">
+                                    <i class="fa fa-database"></i>
+                                </div>
+                                <h3 class="card-title">数据规模</h3>
+                                <p class="card-text">148.6万条豆瓣影评数据，包含训练集、验证集和测试集。</p>
+                                <ul class="text-left mt-3">
+                                    <li>训练集：104.0万条（70%）</li>
+                                    <li>验证集：14.9万条（10%）</li>
+                                    <li>测试集：29.7万条（20%）</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card feature-card">
+                            <div class="card-body text-center">
+                                <div class="feature-icon">
+                                    <i class="fa fa-brain"></i>
+                                </div>
+                                <h3 class="card-title">模型对比</h3>
+                                <p class="card-text">三种模型方案的性能对比，包括准确率、F1分数和训练时间。</p>
+                                <ul class="text-left mt-3">
+                                    <li>Naive Bayes：传统机器学习方法</li>
+                                    <li>Bi-LSTM+Attention：轻量深度学习模型</li>
+                                    <li>BERT：预训练语言模型</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card feature-card">
+                            <div class="card-body text-center">
+                                <div class="feature-icon">
+                                    <i class="fa fa-chart-line"></i>
+                                </div>
+                                <h3 class="card-title">可视化分析</h3>
+                                <p class="card-text">训练曲线、混淆矩阵和注意力热力图等可视化结果。</p>
+                                <ul class="text-left mt-3">
+                                    <li>训练过程可视化</li>
+                                    <li>模型性能对比</li>
+                                    <li>注意力机制可视化</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 模型性能 -->
+            <div id="performance" class="tab-pane fade">
+                <h2 class="text-center mb-5">模型性能对比</h2>
+                
+                <!-- 模型性能概览 -->
+                <div class="row mb-5">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header bg-primary text-white">
+                                <h3 class="card-title">Bi-LSTM + Attention</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="text-center">
+                                            <div class="metric-value">92.10%</div>
+                                            <div class="metric-label">测试准确率</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="text-center">
+                                            <div class="metric-value">92.15%</div>
+                                            <div class="metric-label">测试F1分数</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-4">
+                                    <div class="col-md-6">
+                                        <div class="text-center">
+                                            <div class="metric-value">91.18%</div>
+                                            <div class="metric-label">训练准确率</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="text-center">
+                                            <div class="metric-value">~51分钟</div>
+                                            <div class="metric-label">训练时间</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-4">
+                                    <h4>测试集评估报告</h4>
+                                    <div class="report-content">
+测试集最终评估报告（Final Test Report）
+=================================================================
+               precision    recall  f1-score   support
+
+Negative (负向)     0.8114    0.8379    0.8244     65770
+Positive (正向)     0.9535    0.9447    0.9491    231477
+
+     accuracy                         0.9210    297247
+    macro avg     0.8824    0.8913    0.8867    297247
+ weighted avg     0.9221    0.9210    0.9215    297247
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header bg-secondary text-white">
+                                <h3 class="card-title">Naive Bayes</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="text-center">
+                                            <div class="metric-value">88.23%</div>
+                                            <div class="metric-label">测试准确率</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="text-center">
+                                            <div class="metric-value">87.41%</div>
+                                            <div class="metric-label">测试F1分数</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-4">
+                                    <div class="col-md-6">
+                                        <div class="text-center">
+                                            <div class="metric-value">-</div>
+                                            <div class="metric-label">训练准确率</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="text-center">
+                                            <div class="metric-value">0.1秒</div>
+                                            <div class="metric-label">训练时间</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-4">
+                                    <h4>测试集评估报告</h4>
+                                    <div class="report-content">
+Naive Bayes 测试集评估结果（Baseline）
+=================================================================
+测试集 Accuracy: 88.23%
+               precision    recall  f1-score   support
+
+Negative (负向)     0.8373    0.5811    0.6860     65770
+Positive (正向)     0.8905    0.9679    0.9276    231477
+
+     accuracy                         0.8823    297247
+    macro avg     0.8639    0.7745    0.8068    297247
+ weighted avg     0.8787    0.8823    0.8741    297247
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header bg-success text-white">
+                                <h3 class="card-title">BERT</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="text-center">
+                                            <div class="metric-value">94.08%</div>
+                                            <div class="metric-label">测试准确率</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="text-center">
+                                            <div class="metric-value">94.03%</div>
+                                            <div class="metric-label">测试F1分数</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-4">
+                                    <div class="col-md-6">
+                                        <div class="text-center">
+                                            <div class="metric-value">-</div>
+                                            <div class="metric-label">训练准确率</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="text-center">
+                                            <div class="metric-value">~708分钟</div>
+                                            <div class="metric-label">训练时间</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-4">
+                                    <h4>测试集评估报告</h4>
+                                    <div class="report-content">
+测试集评估结果
+=================================================================
+测试集 Accuracy: 94.08%
+               precision    recall  f1-score   support
+
+Negative (负向)     0.8815    0.8461    0.8634     65770
+Positive (正向)     0.9568    0.9677    0.9622    231477
+
+     accuracy                         0.9408    297247
+    macro avg     0.9191    0.9069    0.9128    297247
+ weighted avg     0.9401    0.9408    0.9403    297247
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 模型性能对比图 -->
+                <div class="card mb-5">
+                    <div class="card-header">
+                        <h3 class="card-title">模型性能对比</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <img src="dataset/figures/model_comparison.png" class="img-fluid rounded mx-auto d-block">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 混淆矩阵 -->
+                <div class="row mb-5">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header bg-primary text-white">
+                                <h3 class="card-title">Bi-LSTM + Attention 混淆矩阵</h3>
+                            </div>
+                            <div class="card-body">
+                                <img src="dataset/figures/confusion_matrix.png" class="img-fluid rounded">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header bg-secondary text-white">
+                                <h3 class="card-title">Naive Bayes 混淆矩阵</h3>
+                            </div>
+                            <div class="card-body">
+                                <img src="dataset/figures/baseline_confusion_matrix.png" class="img-fluid rounded">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header bg-success text-white">
+                                <h3 class="card-title">BERT 混淆矩阵</h3>
+                            </div>
+                            <div class="card-body">
+                                <img src="dataset/figures/bert_confusion_matrix.png" class="img-fluid rounded">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 可视化分析 -->
+            <div id="visualization" class="tab-pane fade">
+                <h2 class="text-center mb-5">可视化分析</h2>
+                
+                <!-- 训练曲线 -->
+                <div class="card mb-5">
+                    <div class="card-header">
+                        <h3 class="card-title">Bi-LSTM 训练曲线</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <img src="dataset/figures/training_curve.png" class="img-fluid rounded mx-auto d-block">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 数据分布 -->
+                <div class="card mb-5">
+                    <div class="card-header">
+                        <h3 class="card-title">文本长度分布</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <img src="dataset/figures/length_distribution.png" class="img-fluid rounded mx-auto d-block">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 模型性能指标对比 -->
+                <div class="card mb-5">
+                    <div class="card-header">
+                        <h3 class="card-title">模型性能指标对比</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="performanceChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 案例分析 -->
+            <div id="case-study" class="tab-pane fade">
+                <h2 class="text-center mb-5">案例分析 - 注意力可视化</h2>
+                
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card case-study-card">
+                            <div class="card-header">
+                                <h3 class="card-title">Case 1 - 负向评论</h3>
+                            </div>
+                            <div class="card-body">
+                                <p class="mb-3"><strong>评论内容：</strong>完全浪费时间，不仅演员演技尴尬，剧本也是一塌糊涂。</p>
+                                <img src="dataset/figures/case_study_1.png" class="img-fluid rounded case-study-image">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card case-study-card">
+                            <div class="card-header">
+                                <h3 class="card-title">Case 2 - 正向评论</h3>
+                            </div>
+                            <div class="card-body">
+                                <p class="mb-3"><strong>评论内容：</strong>这是我今年看过的最好的电影，特效炸裂，强烈推荐！</p>
+                                <img src="dataset/figures/case_study_2.png" class="img-fluid rounded case-study-image">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card case-study-card">
+                            <div class="card-header">
+                                <h3 class="card-title">Case 3 - 混合情感</h3>
+                            </div>
+                            <div class="card-body">
+                                <p class="mb-3"><strong>评论内容：</strong>虽然剧情有点老套，但是特效真的太棒了，完全值回票价。</p>
+                                <img src="dataset/figures/case_study_3.png" class="img-fluid rounded case-study-image">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 页脚 -->
+    <footer class="bg-dark text-white text-center py-5 mt-10">
+        <div class="container">
+            <p>中文影评情感分析系统 - 可视化平台</p>
+            <p class="small">© 2026 情感分析项目团队</p>
+        </div>
+    </footer>
+    
+    <script>
+        // 性能对比图表
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('performanceChart').getContext('2d');
+            const performanceChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['准确率', 'F1分数', '负向F1', '正向F1', '训练速度'],
+                    datasets: [
+                        {
+                            label: 'Bi-LSTM + Attention',
+                            data: [92.10, 92.15, 82.44, 94.91, 85], // 训练速度是相对值，越高越快
+                            backgroundColor: 'rgba(52, 152, 219, 0.2)',
+                            borderColor: 'rgba(52, 152, 219, 1)',
+                            pointBackgroundColor: 'rgba(52, 152, 219, 1)',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: 'rgba(52, 152, 219, 1)'
+                        },
+                        {
+                            label: 'Naive Bayes',
+                            data: [88.23, 87.41, 68.60, 92.76, 100],
+                            backgroundColor: 'rgba(46, 204, 113, 0.2)',
+                            borderColor: 'rgba(46, 204, 113, 1)',
+                            pointBackgroundColor: 'rgba(46, 204, 113, 1)',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: 'rgba(46, 204, 113, 1)'
+                        },
+                        {
+                            label: 'BERT',
+                            data: [94.08, 94.03, 86.34, 96.22, 10],
+                            backgroundColor: 'rgba(231, 76, 60, 0.2)',
+                            borderColor: 'rgba(231, 76, 60, 1)',
+                            pointBackgroundColor: 'rgba(231, 76, 60, 1)',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: 'rgba(231, 76, 60, 1)'
+                        }
+                    ]
+                },
+                options: {
+                    scales: {
+                        r: {
+                            angleLines: {
+                                display: true
+                            },
+                            suggestedMin: 60,
+                            suggestedMax: 100
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

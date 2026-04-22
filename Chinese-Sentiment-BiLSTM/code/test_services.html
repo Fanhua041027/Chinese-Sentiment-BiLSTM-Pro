@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>服务状态测试</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .status {
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .status.success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .status.error {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .status.loading {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 后端服务状态测试</h1>
+    
+    <div class="card">
+        <h3>DeepSeek API 服务 (端口 5000)</h3>
+        <div id="deepseek-status" class="status loading">
+            正在检查...
+        </div>
+    </div>
+    
+    <div class="card">
+        <h3>本地模型服务 (端口 5001)</h3>
+        <div id="local-status" class="status loading">
+            正在检查...
+        </div>
+    </div>
+    
+    <div class="card">
+        <button onclick="checkServices()">🔄 重新检查服务状态</button>
+    </div>
+    
+    <div class="card">
+        <h3>📝 使用说明</h3>
+        <ol>
+            <li>确保两个服务都显示为绿色"运行正常"</li>
+            <li>打开 <a href="http://localhost:8000/Chinese-Sentiment-BiLSTM/code/advanced_app.html" target="_blank">情感分析页面</a></li>
+            <li>选择分析模式（本地模型 或 DeepSeek AI）</li>
+            <li>输入文本并点击分析</li>
+        </ol>
+    </div>
+
+    <script>
+        async function checkService(name, url, elementId) {
+            const element = document.getElementById(elementId);
+            try {
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    element.className = 'status success';
+                    element.innerHTML = `✅ ${name}运行正常！<br><small>响应：${JSON.stringify(data)}</small>`;
+                    return true;
+                } else {
+                    throw new Error(`状态码：${response.status}`);
+                }
+            } catch (error) {
+                element.className = 'status error';
+                element.innerHTML = `❌ ${name}连接失败<br><small>${error.message}</small>`;
+                return false;
+            }
+        }
+        
+        async function checkServices() {
+            await Promise.all([
+                checkService('DeepSeek API', 'http://localhost:5000/api/health', 'deepseek-status'),
+                checkService('本地模型', 'http://localhost:5001/api/local/health', 'local-status')
+            ]);
+        }
+        
+        // 页面加载时检查服务
+        window.onload = checkServices;
+    </script>
+</body>
+</html>

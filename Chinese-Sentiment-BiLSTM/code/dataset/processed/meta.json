@@ -1,0 +1,75 @@
+{
+  "data_dir": "dataset",
+  "raw_file": "dataset\\raw\\ratings.csv",
+  "min_len_filter": 5,
+  "seed": 42,
+  "enable_balance": false,
+  "balance_info": {
+    "enable_balance": false,
+    "before_balance": {
+      "1": 2660142,
+      "0": 268729
+    },
+    "after_balance": null,
+    "balance_method": null
+  },
+  "length_stats": {
+    "mean": 44.14241733418781,
+    "p50": 25,
+    "p90": 87,
+    "p95": 128,
+    "p99": 292,
+    "min": 5,
+    "max": 10000
+  },
+  "label_distribution_after_clean": {
+    "1": 2660142,
+    "0": 268729
+  },
+  "splits": {
+    "train": {
+      "total": 2050209,
+      "label_counts": {
+        "1": 1862099,
+        "0": 188110
+      },
+      "label_ratio": {
+        "1": 0.9082483785799399,
+        "0": 0.0917516214200601
+      }
+    },
+    "val": {
+      "total": 292887,
+      "label_counts": {
+        "1": 266014,
+        "0": 26873
+      },
+      "label_ratio": {
+        "1": 0.9082478908247891,
+        "0": 0.09175210917521091
+      }
+    },
+    "test": {
+      "total": 585775,
+      "label_counts": {
+        "1": 532029,
+        "0": 53746
+      },
+      "label_ratio": {
+        "1": 0.9082480474584952,
+        "0": 0.09175195254150484
+      }
+    }
+  },
+  "data_lineage": {
+    "raw_count": 7202921,
+    "after_column_normalization": 7202921,
+    "after_clean_and_minlen": 4080779,
+    "length_filter_drop": 3122142,
+    "after_rating_valid": 4080778,
+    "after_drop_neutral_3": 3612977,
+    "neutral_3_dropped": 467801,
+    "dedup_drop": 684106,
+    "final_count": 2928871
+  }
+}

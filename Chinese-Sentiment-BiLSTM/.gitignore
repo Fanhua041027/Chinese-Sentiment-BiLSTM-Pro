@@ -1,0 +1,74 @@
+# --- Python ---
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# --- LaTeX ---
+*.aux
+*.glo
+*.idx
+*.log
+*.toc
+*.ist
+*.acn
+*.acr
+*.alg
+*.bbl
+*.blg
+*.dvi
+*.glg
+*.gls
+*.ilg
+*.ind
+*.lof
+*.lot
+*.maf
+*.mtc
+*.mtc0
+*.nav
+*.nlo
+*.out
+*.pdfsync
+*.ps
+*.snm
+*.synctex.gz
+*.vrb
+*.fls
+*.fdb_latexmk
+*.pdf
+
+# --- 论文目录（不公开）---
+report/
+
+# --- Claude Code 配置（不公开）---
+.claude/
+CLAUDE.md
+
+# --- 大文件（数据集 & 模型权重）---
+code/checkpoints/
+code/dataset/raw/
+code/dataset/processed/train.csv
+code/dataset/processed/val.csv
+code/dataset/processed/test.csv
+code/dataset/processed/vocab.pkl
+
+# --- Vim/Neovim ---
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
+Session.vim
+session.vim
+
+# --- 操作系统/IDE ---
+.DS_Store
+.idea/
+.vscode/

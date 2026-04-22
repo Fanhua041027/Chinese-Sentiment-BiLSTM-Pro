@@ -1,0 +1,38 @@
+poetry run python main.py baseline_nb                                                                                                          ─╯
+============================================================
+执行命令：baseline_nb - Naive Bayes 基线实验
+============================================================
+信息：启动传统机器学习基线（TF-IDF + Multinomial Naive Bayes）。
+信息：正在读取数据集：dataset/processed/train.csv
+信息：正在对文本进行分词，共 1,040,362 条样本。
+Building prefix dict from the default dictionary ...
+Loading model from cache /tmp/jieba.cache
+Loading model cost 0.371 seconds.
+Prefix dict has been built successfully.
+信息：已启用 jieba 并行分词（线程数：8）。
+Jieba Cutting: 100%|███████████████████████████████████████████████████████████████████████████████████| 1040362/1040362 [01:21<00:00, 12695.27doc/s]
+信息：正在读取数据集：dataset/processed/test.csv
+信息：正在对文本进行分词，共 297,247 条样本。
+信息：已启用 jieba 并行分词（线程数：8）。
+Jieba Cutting: 100%|█████████████████████████████████████████████████████████████████████████████████████| 297247/297247 [00:23<00:00, 12678.26doc/s]
+信息：正在计算 TF-IDF 特征矩阵。
+信息：训练特征矩阵维度：(1040362, 30000)。
+信息：开始训练 Multinomial Naive Bayes 模型。
+信息：Naive Bayes 训练耗时：0.10 秒。
+信息：开始在测试集上评估 Naive Bayes。
+
+============================================================
+Naive Bayes 测试集评估结果（Baseline）
+============================================================
+测试集 Accuracy: 88.23%
+               precision    recall  f1-score   support
+
+Negative (负向)     0.8373    0.5811    0.6860     65770
+Positive (正向)     0.8905    0.9679    0.9276    231477
+
+     accuracy                         0.8823    297247
+    macro avg     0.8639    0.7745    0.8068    297247
+ weighted avg     0.8787    0.8823    0.8741    297247
+
+信息：Naive Bayes 测试集分类报告已保存至：dataset/reports/baseline_report.txt。
+信息：混淆矩阵图已保存至：dataset/figures/baseline_confusion_matrix.png。

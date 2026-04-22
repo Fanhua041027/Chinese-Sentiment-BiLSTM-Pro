@@ -1,0 +1,7 @@
+poetry run python main.py plot_curve                                                                                                           ─╯
+============================================================
+执行命令：plot_curve - 绘制训练曲线
+============================================================
+信息：正在读取训练日志：dataset/reports/training_log.csv
+信息：训练曲线图已生成并保存至：dataset/figures/training_curve.png。
+提示：图像已按论文插图需求进行排版，可直接用于 LaTeX 或其他排版系统。

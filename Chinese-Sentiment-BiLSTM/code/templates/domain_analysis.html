@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>跨领域情感分析</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 1000px;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .positive {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+        }
+        .negative {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+        }
+        .domain-badge {
+            font-size: 14px;
+            padding: 5px 12px;
+            border-radius: 20px;
+        }
+        .domain-film { background-color: #e3f2fd; color: #1565c0; }
+        .domain-product { background-color: #fff3e0; color: #e65100; }
+        .domain-news { background-color: #f3e5f5; color: #7b1fa2; }
+        .domain-mixed { background-color: #e8f5e9; color: #2e7d32; }
+        .token-attention {
+            margin-top: 20px;
+        }
+        .token {
+            display: inline-block;
+            padding: 5px 10px;
+            margin: 2px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .token-high {
+            background-color: #ff6b6b;
+            color: white;
+        }
+        .token-medium {
+            background-color: #ffd93d;
+            color: black;
+        }
+        .token-low {
+            background-color: #6bcb77;
+            color: white;
+        }
+        .domain-info {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+        .batch-results {
+            margin-top: 30px;
+        }
+        .batch-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+        .stats-card {
+            margin-bottom: 20px;
+        }
+        .nav-tabs {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">跨领域情感分析系统</h1>
+        <p class="text-center text-muted">自动识别文本领域（影评/商品评论/新闻）并进行情感分析</p>
+
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="single-tab" data-bs-toggle="tab" data-bs-target="#single" type="button">单条分析</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="batch-tab" data-bs-toggle="tab" data-bs-target="#batch" type="button">批量分析</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="domain-tab" data-bs-toggle="tab" data-bs-target="#domain" type="button">领域识别</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="stats-tab" data-bs-toggle="tab" data-bs-target="#stats" type="button">领域统计</button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="single">
+                <div class="card">
+                    <div class="card-body">
+                        <div id="model-status" class="mb-3"></div>
+                        <form id="single-form">
+                            <div class="mb-3">
+                                <label for="single-text" class="form-label">输入文本</label>
+                                <textarea class="form-control" id="single-text" rows="3" placeholder="请输入至少5个字符的文本..."></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="domain-select" class="form-label">指定领域（可选）</label>
+                                <select class="form-select" id="domain-select">
+                                    <option value="">自动识别</option>
+                                    <option value="film">影评</option>
+                                    <option value="product">商品评论</option>
+                                    <option value="news">新闻</option>
+                                    <option value="mixed">混合/通用</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">分析情感</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="single-result" class="result d-none"></div>
+
+                <div class="domain-info d-none" id="domain-info">
+                    <h5>领域识别信息</h5>
+                    <div id="domain-details"></div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="batch">
+                <div class="card">
+                    <div class="card-body">
+                        <form id="batch-form">
+                            <div class="mb-3">
+                                <label for="batch-texts" class="form-label">输入多条文本（每行一条）</label>
+                                <textarea class="form-control" id="batch-texts" rows="8" placeholder="请输入多条文本，每行一条..."></textarea>
+                            </div>
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="auto-detect" checked>
+                                <label class="form-check-label" for="auto-detect">自动识别领域</label>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">批量分析</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="batch-results" class="batch-results d-none"></div>
+            </div>
+
+            <div class="tab-pane fade" id="domain">
+                <div class="card">
+                    <div class="card-body">
+                        <form id="domain-form">
+                            <div class="mb-3">
+                                <label for="domain-text" class="form-label">输入文本进行领域识别</label>
+                                <textarea class="form-control" id="domain-text" rows="3" placeholder="请输入至少5个字符的文本..."></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">识别领域</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="domain-result" class="result d-none"></div>
+            </div>
+
+            <div class="tab-pane fade" id="stats">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>领域分布统计</h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="stats-card">
+                                    <canvas id="domainPieChart"></canvas>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="stats-card">
+                                    <canvas id="sentimentBarChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <h5>领域说明</h5>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <span class="domain-badge domain-film">影评</span>
+                                电影、电视剧、综艺等评论，特效、剧情、演技等评价
+                            </li>
+                            <li class="list-group-item">
+                                <span class="domain-badge domain-product">商品评论</span>
+                                购物体验、产品质量、性价比、物流服务等评价
+                            </li>
+                            <li class="list-group-item">
+                                <span class="domain-badge domain-news">新闻</span>
+                                时事政治、经济数据、政策发布、行业报告等
+                            </li>
+                            <li class="list-group-item">
+                                <span class="domain-badge domain-mixed">混合/通用</span>
+                                未分类或跨领域文本
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4 text-center">
+            <a href="/" class="btn btn-secondary">返回主页</a>
+            <a href="/performance" class="btn btn-outline-primary ms-2">模型性能</a>
+        </div>
+    </div>
+
+    <script>
+        let pieChart = null;
+        let barChart = null;
+
+        function getDomainClass(domain) {
+            return 'domain-' + domain;
+        }
+
+        function getDomainName(domain) {
+            const names = {
+                'film': '影评',
+                'product': '商品评论',
+                'news': '新闻',
+                'mixed': '混合/通用'
+            };
+            return names[domain] || domain;
+        }
+
+        document.getElementById('single-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const text = document.getElementById('single-text').value.trim();
+            const domain = document.getElementById('domain-select').value;
+
+            if (text.length < 5) {
+                alert('文本长度至少为5个字符');
+                return;
+            }
+
+            const resultDiv = document.getElementById('single-result');
+            resultDiv.innerHTML = '<div class="text-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>';
+            resultDiv.classList.remove('d-none');
+
+            const endpoint = domain ? '/api/domain/analyze_with_domain' : '/api/domain/analyze';
+            const payload = domain ? {text: text, domain: domain} : {text: text};
+
+            fetch(endpoint, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(payload)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    resultDiv.innerHTML = `<div class="alert alert-danger">${data.error}</div>`;
+                    return;
+                }
+
+                const sentimentClass = data.sentiment === 'positive' ? 'positive' : 'negative';
+                const sentimentName = data.sentiment === 'positive' ? '正向情感' : '负向情感';
+
+                let html = `
+                    <div class="${sentimentClass}">
+                        <h4>情感分析结果</h4>
+                        <p><strong>原始文本:</strong> ${data.text}</p>
+                        <p><strong>情感倾向:</strong> ${sentimentName}</p>
+                        <p><strong>情感概率:</strong> ${(data.sentiment_score * 100).toFixed(2)}%</p>
+                        <p><strong>置信度:</strong> ${(data.confidence * 100).toFixed(2)}%</p>
+                        <p><strong>识别领域:</strong> <span class="domain-badge ${getDomainClass(data.domain)}">${getDomainName(data.domain)}</span></p>
+                `;
+
+                if (data.detected_domain && data.detected_domain !== data.domain) {
+                    html += `<p><strong>指定领域:</strong> <span class="domain-badge ${getDomainClass(data.domain)}">${getDomainName(data.domain)}</span></p>`;
+                }
+
+                html += '</div>';
+                resultDiv.innerHTML = html;
+
+                if (data.detected_domain) {
+                    const domainInfo = document.getElementById('domain-info');
+                    const domainDetails = document.getElementById('domain-details');
+                    domainDetails.innerHTML = `
+                        <p><strong>自动识别领域:</strong> <span class="domain-badge ${getDomainClass(data.detected_domain)}">${getDomainName(data.detected_domain)}</span></p>
+                        <p><strong>领域置信度:</strong> ${(data.domain_confidence * 100).toFixed(2)}%</p>
+                    `;
+                    domainInfo.classList.remove('d-none');
+                } else {
+                    document.getElementById('domain-info').classList.add('d-none');
+                }
+            })
+            .catch(error => {
+                resultDiv.innerHTML = `<div class="alert alert-danger">分析失败: ${error.message}</div>`;
+            });
+        });
+
+        document.getElementById('batch-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const texts = document.getElementById('batch-texts').value.trim().split('\n').filter(t => t.trim().length > 0);
+            const autoDetect = document.getElementById('auto-detect').checked;
+
+            if (texts.length === 0) {
+                alert('请输入至少一条文本');
+                return;
+            }
+
+            if (texts.length > 100) {
+                alert('批量大小不能超过100条');
+                return;
+            }
+
+            const resultDiv = document.getElementById('batch-results');
+            resultDiv.innerHTML = '<div class="text-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>';
+            resultDiv.classList.remove('d-none');
+
+            fetch('/api/domain/batch_analyze', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({texts: texts, auto_detect_domain: autoDetect})
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    resultDiv.innerHTML = `<div class="alert alert-danger">${data.error}</div>`;
+                    return;
+                }
+
+                let html = `<h4>批量分析结果 (${data.summary.total}条)</h4>`;
+
+                html += `
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <h3>${data.summary.total}</h3>
+                                    <p>总条数</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card text-center positive">
+                                <div class="card-body">
+                                    <h3>${data.summary.positive}</h3>
+                                    <p>正向情感</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card text-center negative">
+                                <div class="card-body">
+                                    <h3>${data.summary.negative}</h3>
+                                    <p>负向情感</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                html += '<h5>领域分布:</h5><ul class="list-inline">';
+                for (const [domain, count] of Object.entries(data.summary.domain_distribution)) {
+                    html += `<li class="list-inline-item me-3"><span class="domain-badge ${getDomainClass(domain)}">${getDomainName(domain)}: ${count}</span></li>`;
+                }
+                html += '</ul>';
+
+                html += '<div class="mt-3">';
+                data.results.forEach((result, index) => {
+                    const sentimentClass = result.sentiment === 'positive' ? 'positive' : 'negative';
+                    html += `
+                        <div class="batch-item ${sentimentClass}">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>${index + 1}.</strong> ${result.text.substring(0, 50)}${result.text.length > 50 ? '...' : ''}
+                                </div>
+                                <div>
+                                    <span class="domain-badge ${getDomainClass(result.domain)}">${getDomainName(result.domain)}</span>
+                                    <span class="badge ${sentimentClass === 'positive' ? 'bg-success' : 'bg-danger'}">${result.sentiment === 'positive' ? '正向' : '负向'}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                html += '</div>';
+
+                resultDiv.innerHTML = html;
+
+                updateCharts(data.summary);
+            })
+            .catch(error => {
+                resultDiv.innerHTML = `<div class="alert alert-danger">分析失败: ${error.message}</div>`;
+            });
+        });
+
+        document.getElementById('domain-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const text = document.getElementById('domain-text').value.trim();
+
+            if (text.length < 5) {
+                alert('文本长度至少为5个字符');
+                return;
+            }
+
+            const resultDiv = document.getElementById('domain-result');
+            resultDiv.innerHTML = '<div class="text-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>';
+            resultDiv.classList.remove('d-none');
+
+            fetch('/api/domain/detect_domain', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({text: text})
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    resultDiv.innerHTML = `<div class="alert alert-danger">${data.error}</div>`;
+                    return;
+                }
+
+                let html = `
+                    <div class="positive">
+                        <h4>领域识别结果</h4>
+                        <p><strong>文本:</strong> ${data.text}</p>
+                        <p><strong>识别领域:</strong> <span class="domain-badge ${getDomainClass(data.domain)}">${getDomainName(data.domain)}</span></p>
+                        <p><strong>置信度:</strong> ${(data.confidence * 100).toFixed(2)}%</p>
+                        <h5>各领域概率分布:</h5>
+                        <ul class="list-group list-group-flush">
+                `;
+
+                for (const [domain, prob] of Object.entries(data.all_domains)) {
+                    const isHighest = domain === data.domain;
+                    html += `<li class="list-group-item d-flex justify-content-between align-items-center ${isHighest ? 'fw-bold' : ''}">
+                        <span class="domain-badge ${getDomainClass(domain)}">${getDomainName(domain)}</span>
+                        <span class="badge bg-primary rounded-pill">${(prob * 100).toFixed(2)}%</span>
+                    </li>`;
+                }
+
+                html += '</ul></div>';
+                resultDiv.innerHTML = html;
+            })
+            .catch(error => {
+                resultDiv.innerHTML = `<div class="alert alert-danger">识别失败: ${error.message}</div>`;
+            });
+        });
+
+        function updateCharts(summary) {
+            const domainLabels = Object.keys(summary.domain_distribution).map(d => getDomainName(d));
+            const domainData = Object.values(summary.domain_distribution);
+            const colors = ['#1565c0', '#e65100', '#7b1fa2', '#2e7d32'];
+
+            if (pieChart) {
+                pieChart.destroy();
+            }
+
+            const ctxPie = document.getElementById('domainPieChart').getContext('2d');
+            pieChart = new Chart(ctxPie, {
+                type: 'pie',
+                data: {
+                    labels: domainLabels,
+                    datasets: [{
+                        data: domainData,
+                        backgroundColor: colors
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '领域分布'
+                        }
+                    }
+                }
+            });
+        }
+
+        fetch('/api/domain/health', {
+            method: 'GET'
+        })
+        .then(response => response.json())
+        .then(data => {
+            const statusDiv = document.getElementById('model-status');
+            if (data.model_loaded) {
+                statusDiv.innerHTML = '<div class="alert alert-success">模型已加载 - 支持跨领域情感分析</div>';
+            } else {
+                statusDiv.innerHTML = `<div class="alert alert-warning">模型未完全加载: ${data.error || '未知错误'}</div>`;
+            }
+        })
+        .catch(error => {
+            console.error('Failed to check model status:', error);
+        });
+    </script>
+</body>
+</html>

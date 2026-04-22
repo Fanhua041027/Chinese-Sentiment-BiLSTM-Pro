@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中文影评情感分析</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 800px;
+        }
+        .card {
+            margin-bottom: 30px;
+        }
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-5">中文影评情感分析</h1>
+        
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title text-center">项目简介</h2>
+                <p class="card-text">
+                    本项目实现了一个基于深度学习的中文影评情感分析系统，对比了三种不同层次的模型方案：
+                    Naive Bayes（传统机器学习）、Bi-LSTM+Attention（轻量深度学习）和BERT（预训练语言模型）。
+                    项目使用了148万条豆瓣影评数据，提供了完整的端到端解决方案。
+                </p>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <div class="feature-icon text-primary">📊</div>
+                        <h3 class="card-title">数据规模</h3>
+                        <p class="card-text">148.6万条豆瓣影评数据，包含训练集、验证集和测试集。</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <div class="feature-icon text-success">🤖</div>
+                        <h3 class="card-title">模型对比</h3>
+                        <p class="card-text">三种模型方案的性能对比，包括准确率、F1分数和训练时间。</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <div class="feature-icon text-warning">📈</div>
+                        <h3 class="card-title">可视化分析</h3>
+                        <p class="card-text">训练曲线、混淆矩阵和注意力热力图等可视化结果。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-5 text-center">
+            <a href="/performance" class="btn btn-primary btn-lg">查看模型性能</a>
+        </div>
+    </div>
+</body>
+</html>

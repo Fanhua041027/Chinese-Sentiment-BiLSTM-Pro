@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中文影评情感分析</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 800px;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .positive {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+        }
+        .negative {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+        }
+        .attention-visualization {
+            margin-top: 30px;
+        }
+        .token-attention {
+            margin-top: 20px;
+        }
+        .token {
+            display: inline-block;
+            padding: 5px 10px;
+            margin: 2px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .token-high {
+            background-color: #ff6b6b;
+            color: white;
+        }
+        .token-medium {
+            background-color: #ffd93d;
+            color: black;
+        }
+        .token-low {
+            background-color: #6bcb77;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-5">中文影评情感分析</h1>
+        
+        <div class="card">
+            <div class="card-body">
+                {% if model_loaded %}
+                <form id="prediction-form">
+                    <div class="mb-3">
+                        <label for="text" class="form-label">输入影评文本</label>
+                        <textarea class="form-control" id="text" rows="4" placeholder="请输入至少5个字符的影评文本..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">分析情感</button>
+                </form>
+                {% else %}
+                <div class="alert alert-warning text-center">
+                    <h4>模型未加载</h4>
+                    <p>请先运行以下命令训练模型：</p>
+                    <code>poetry run python main.py train</code>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div id="result" class="result d-none"></div>
+        
+        <div class="attention-visualization d-none" id="attention-section">
+            <h3 class="mt-4">注意力可视化</h3>
+            <div id="attention-image" class="mt-2"></div>
+            <div class="token-attention mt-3">
+                <h4>词汇注意力权重</h4>
+                <div id="token-list"></div>
+            </div>
+        </div>
+        
+        <div class="mt-5 text-center">
+            <a href="/performance" class="btn btn-secondary">查看模型性能</a>
+            <a href="/trend" class="btn btn-primary ms-2">情感趋势分析</a>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById('prediction-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const text = document.getElementById('text').value;
+            if (text.length < 5) {
+                alert('文本长度至少为5个字符');
+                return;
+            }
+            
+            // 显示加载状态
+            document.getElementById('result').innerHTML = '<div class="text-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>';
+            document.getElementById('result').classList.remove('d-none');
+            document.getElementById('attention-section').classList.add('d-none');
+            
+            // 发送请求
+            fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({text: text})
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    document.getElementById('result').innerHTML = `<div class="alert alert-danger">${data.error}</div>`;
+                    return;
+                }
+                
+                // 显示结果
+                const sentimentClass = data.sentiment === '正向' ? 'positive' : 'negative';
+                const probability = data.sentiment === '正向' ? data.probability : (1 - data.probability);
+                
+                document.getElementById('result').innerHTML = `
+                    <div class="${sentimentClass}">
+                        <h3>情感分析结果</h3>
+                        <p><strong>原始文本:</strong> ${data.text}</p>
+                        <p><strong>情感倾向:</strong> ${data.sentiment}</p>
+                        <p><strong>置信度:</strong> ${(probability * 100).toFixed(2)}%</p>
+                    </div>
+                `;
+                document.getElementById('result').classList.remove('d-none');
+                
+                // 显示注意力可视化
+                document.getElementById('attention-image').innerHTML = `<img src="data:image/png;base64,${data.attention_image}" class="img-fluid rounded">`;
+                
+                // 显示词汇注意力权重
+                let tokenHtml = '';
+                data.tokens.forEach((token, index) => {
+                    const attention = data.attention[index];
+                    let tokenClass = 'token token-low';
+                    if (attention > 0.7) {
+                        tokenClass = 'token token-high';
+                    } else if (attention > 0.3) {
+                        tokenClass = 'token token-medium';
+                    }
+                    tokenHtml += `<span class="${tokenClass}" title="注意力权重: ${attention.toFixed(4)}">${token}</span>`;
+                });
+                document.getElementById('token-list').innerHTML = tokenHtml;
+                document.getElementById('attention-section').classList.remove('d-none');
+            })
+            .catch(error => {
+                document.getElementById('result').innerHTML = `<div class="alert alert-danger">分析失败: ${error.message}</div>`;
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+docker run --gpus all --ipc=host -it --rm -v "$(pwd)":/app sentiment-bert python main.py baseline_bert                                                                        ─╯
+============================================================
+执行命令：baseline_bert - BERT 微调基线实验
+============================================================
+信息：启动 BERT-Base-Chinese 微调实验。
+信息：使用设备：cuda。
+'(ProtocolError('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer')), '(Request ID: c4479dc3-c25c-4640-9dc8-487f1d2861a5)')' thrown while requesting HEAD https://huggingface.co/bert-base-chinese/resolve/main/tokenizer_config.json
+Retrying in 1s [Retry 1/5].
+'(ProtocolError('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer')), '(Request ID: 8e817e98-c75e-43bb-957d-a1a050d841ae)')' thrown while requesting GET https://huggingface.co/bert-base-chinese/resolve/main/tokenizer_config.json
+Retrying in 1s [Retry 1/5].
+tokenizer_config.json: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 49.0/49.0 [00:00<00:00, 509kB/s]
+vocab.txt: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 110k/110k [00:00<00:00, 629kB/s]
+tokenizer.json: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 269k/269k [00:00<00:00, 888kB/s]
+config.json: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 624/624 [00:00<00:00, 6.59MB/s]
+信息：构建训练集与测试集。
+信息：正在读取数据集：dataset/processed/train.csv
+信息：样本数量：1,040,362
+信息：正在读取数据集：dataset/processed/test.csv
+信息：样本数量：297,247
+信息：加载预训练模型：bert-base-chinese。
+model.safetensors: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 412M/412M [00:12<00:00, 33.3MB/s]
+Some weights of BertForSequenceClassification were not initialized from the model checkpoint at bert-base-chinese and are newly initialized: ['classifier.bias', 'classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+信息：BERT 可训练参数总数：102,269,186。
+信息：开始微调 BERT，训练集样本数：1,040,362，batch_size=16，epoch=3。
+BERT Training Epoch 1/3: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████| 65023/65023 [3:56:59<00:00,  4.57it/s]
+Epoch 1/3 | Train Loss: 0.2074 | Time: 236.99 min
+BERT Training Epoch 2/3: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████| 65023/65023 [3:55:53<00:00,  4.59it/s]
+Epoch 2/3 | Train Loss: 0.1466 | Time: 235.89 min
+BERT Training Epoch 3/3: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████| 65023/65023 [3:55:06<00:00,  4.61it/s]
+Epoch 3/3 | Train Loss: 0.1015 | Time: 235.11 min
+信息：BERT 训练总耗时：707.99 分钟。
+信息：微调后模型参数文件大小约为：390.2 MB。
+信息：开始在测试集（297,247 条样本）上评估 BERT。
+BERT Evaluation: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 18578/18578 [19:13<00:00, 16.11it/s]
+
+============================================================
+BERT 测试集评估结果
+============================================================
+测试集 Accuracy: 94.08%
+               precision    recall  f1-score   support
+
+Negative (负向)     0.8815    0.8461    0.8634     65770
+Positive (正向)     0.9568    0.9677    0.9622    231477
+
+     accuracy                         0.9408    297247
+    macro avg     0.9191    0.9069    0.9128    297247
+ weighted avg     0.9401    0.9408    0.9403    297247
+
+信息：BERT 测试集分类报告已保存至：dataset/reports/bert_report.txt。
+
+============================================================
+Bi-LSTM 与 BERT 对比摘要
+============================================================
+BERT-Base Chinese Accuracy: 94.08%
+BERT 训练总耗时约：707.99 分钟
+BERT 模型文件大小约：390.2 MB
+============================================================
+信息：模型对比图已保存至：dataset/figures/model_comparison.png。

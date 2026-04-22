@@ -1,0 +1,19 @@
+poetry run python main.py preprocess                                                                                                           ─╯
+============================================================
+执行命令：preprocess - 构建词表
+============================================================
+信息：读取元信息文件: /home/SuZX/CodeSpace/Python/projects/SentimentAnalysis_Final/code/dataset/processed/meta.json
+信息：将采用 max_len=128 构建词表。
+信息：正在读取训练集: /home/SuZX/CodeSpace/Python/projects/SentimentAnalysis_Final/code/dataset/processed/train.csv
+[Step 2] 开始构建词表（训练语料规模: 1,040,362 条）。
+流式分词统计中:   0%|                                                                                                      | 0/11 [00:00<?, ?batch/s]Building prefix dict from the default dictionary ...
+Dumping model to file cache /tmp/jieba.cache
+Loading model cost 0.407 seconds.
+Prefix dict has been built successfully.
+流式分词统计中: 100%|█████████████████████████████████████████████████████████████████████████████████████████████| 11/11 [01:25<00:00,  7.74s/batch]
+信息：词频统计完成，正在根据词频截断构建词表。
+信息：词表构建完成。
+    原始词汇量（unique tokens）: 223,363
+    最终词表大小（vocab size）: 30,000
+信息：词表及统计信息已序列化保存至: /home/SuZX/CodeSpace/Python/projects/SentimentAnalysis_Final/code/dataset/processed/vocab.pkl
+信息：词表构建流程执行完毕。

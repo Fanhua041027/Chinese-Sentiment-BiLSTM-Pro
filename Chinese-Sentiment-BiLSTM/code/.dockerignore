@@ -1,0 +1,23 @@
+# 虚拟环境
+.venv/
+venv/
+
+# 数据集
+dataset/
+
+# 缓存和历史
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.git/
+.ipynb_checkpoints/
+.mypy_cache/
+.pytest_cache/
+
+# 构建产物和大文件
+*.pth
+*.pt
+*.png
+*.jpg
+*.jpeg

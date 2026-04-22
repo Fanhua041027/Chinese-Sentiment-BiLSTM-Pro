@@ -127,8 +127,8 @@ code/
 ### 1. 克隆仓库并安装依赖
 
 ```bash
-git clone https://github.com/Candy-A-Mine/Chinese-Sentiment-BiLSTM.git
-cd Chinese-Sentiment-BiLSTM/code
+git clone https://github.com/Candy-A-Mine/Chinese-Sentiment-BiLSTM-Pro.git
+cd Chinese-Sentiment-BiLSTM-Pro/code
 poetry install
 ```
 
